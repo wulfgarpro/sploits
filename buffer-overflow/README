@@ -1,0 +1,51 @@
+Basic buffer overflow example with shellcode and setuid 
+for root shell.
+
+Do this run with a non root user (you will need sudo  or 
+root for some commands):
+
+1. Compile our ALSR test program: 
+   * gcc esp.c -o esp
+2. Test ALSR is working: 
+   * ./esp
+   * ./esp 
+   * ./esp
+3. Disable ALSR: 
+   * sudo echo 0 /proc/sys/kernel/randomize_va_space
+4. Test ALSR has been disabled:
+   * ./esp
+   * ./esp 
+5. Compile our vulnerable program: 
+   * gcc -g -z execstack bo1.c -o bo1
+6. Test with no overflow: 
+   * ./bo1 A
+7. Test with overflow: 
+   * ./bo1 $(cat e1)
+8. Test we can overwrite return address value: 
+   * gdb ./bo1
+   * break 10
+   * r $(cat e2)
+   * info registers
+   * x/40x $esp 
+   * The bottom of stack ($ebp) should contain 4321 (we can
+     overwrite $eip
+9. Run exploit and select NOP address to replace in exploit file:
+   * gdb ./bo1
+   * break 10
+   * r $(cat e3)
+   * info registers
+   * x/40x $esp
+   * Select an address in the middle x90
+10. Update exploit b3 python script with chosen address
+11. Run exploit and get shell from gdb (no root since we
+    run gdb as non root user)
+    * gdb ./bo1
+    * r $(cat e4) 
+12. Setuid and run without debugger:
+    * sudo chown root bo1
+    * sudo chmod u+s bo1
+    * gdb ./bo1 $(cat e4)
+    * id (should be root)
+13. If exploit failed, it's because environment variables are on 
+    the stack and offset is wrong.  Play with address in e4 with 
+    hexedit adding or removing 50 or 20 at a time until it works.
