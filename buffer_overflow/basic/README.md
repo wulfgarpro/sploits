@@ -1,22 +1,14 @@
 Basic buffer overflow example with shellcode and setuid for root shell.
 
-Do this run with a non root user (you will need sudo  or root for some commands):
+Perform the below instructions  with a non root user (you will need sudo  
+or root for some commands):
 
 I've wrote and tested this code on a VM running: Ubuntu 12.04.4 LTS i686
 
-1. Compile our ALSR test program: 
-   * gcc esp.c -o esp
-2. Test ALSR is working: 
-   * ./esp
-   * ./esp 
-   * ./esp (addresses should vary)
-3. Disable ALSR: 
-   * sudo echo 0 /proc/sys/kernel/randomize_va_space
-4. Test ALSR has been disabled:
-   * ./esp
-   * ./esp (addresses should remain static)
+1. Test ALSR is disabled:
+   * See ../common/README.md on esp.c
 5. Compile test vulnerable program: 
-   * gcc -g -z execstack bo1.c -o bo1
+   * gcc -g -z execstack -o bo1 bo1.c
 6. Test with no overflow: 
    * ./bo1 A
 7. Test with overflow: 
@@ -47,6 +39,8 @@ I've wrote and tested this code on a VM running: Ubuntu 12.04.4 LTS i686
     * sudo chmod u+s bo1
     * gdb ./bo1 $(cat e4)
     * id (should be root) 
-13. If exploit failed, it's because environment variables are on the stack and offset is wrong.  Play with address in     e4 with hexedit adding or removing 50 or 20 at a time until it works.  A more resiliant method is to run gdb and n    non gdb exploits with an empty envionment like so:
+13. If exploit failed, it's because environment variables are on the stack and offset is wrong.  
+Play with address in e4 with hexedit adding or removing 50 or 20 at a time until it works. A more 
+resiliant method is to run gdb and non gdb exploits with an empty envionment like so:
     * env -i PWD="." SHELL="/bin/bash" SHLVL=0 gdb ./bo1 (remember unset env COLUMNS and unset env LINES)
     * env -i PWD="." SHELL="/bin/bash" SHLVL=0 ./vuln $(cat e4)
