@@ -1,7 +1,8 @@
 ## Basic buffer overflow example.
 
 The buffer is overflown enough to overwrite the value of the
-return address which is what eip will be assigned to call.  
+return address which is what eip will be assigned to call as
+the next instruction to execute once the function returns.
 
 This is possible since the strcpy to the buffer occurs without
 a size check.
@@ -13,7 +14,7 @@ Performing this exploit with a non user but u+s (setuid) will
 allow us elevate to root.
 
 1. Test ALSR is disabled:
-   * See ../common/README.md on esp.c
+   * See ../../common/README.md on esp.c
 2. If not, disable ALSR and re-test:
    * echo 0 > /proc/sys/kernel/randomize_va_space
 3. Compile test vulnerable program: 
