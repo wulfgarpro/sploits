@@ -1,4 +1,4 @@
-Basic buffer overflow example.
+## Basic buffer overflow example.
 
 The buffer is overflown enough to overwrite the value of the
 return address which is what eip will be assigned to call.  
