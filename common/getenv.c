@@ -17,14 +17,14 @@ int main(int argc, char *argv[]) {
      * exist in the process memory layout above the stack.
      *
      * Adding will result in a higher address closer to the environment 
-     * variables in the programs memory, while subtracting will do the 
+     * variables in the programs memory while subtracting will do the 
      * oppostite. 
      *
      * By adding argv[0], *this* program's name, we're moving as close 
-     * to the environment variable address as we can, less the offset
+     * to the environment variable's address as we can, less the offset
      * that is this program's name. By subtracting from the said program 
-     * name the target programs name, we introduce the needed offset 
-     * that should be the address of the environment variable when
+     * name the target program's name, we introduce the needed offset 
+     * that should be the real address of the environment variable when
      * executing that target program. 
      *
      * By multiplying by two, we enact the observation that for each
